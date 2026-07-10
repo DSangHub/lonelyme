@@ -1,4 +1,5 @@
 -- LonelyMe core schema for Supabase
+-- Run this in the Supabase SQL Editor
 
 create table if not exists public.profiles (
   id uuid references auth.users on delete cascade primary key,
@@ -7,6 +8,7 @@ create table if not exists public.profiles (
   bio text default '',
   interests text[] default '{}',
   languages text[] default '{English}',
+  timezone text default 'UTC',
   avatar_url text,
   is_available boolean default true,
   created_at timestamptz default now()
@@ -32,6 +34,8 @@ create table if not exists public.matches (
   id uuid primary key default gen_random_uuid(),
   user1_id uuid references auth.users on delete cascade not null,
   user2_id uuid references auth.users on delete cascade not null,
+  compatibility_score integer default 0,
+  match_reasons text[] default '{}',
   status text default 'active' check (status in ('active', 'ended')),
   created_at timestamptz default now(),
   unique (user1_id, user2_id),
@@ -56,7 +60,27 @@ create table if not exists public.messages (
   created_at timestamptz default now()
 );
 
+create table if not exists public.mood_checkins (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users on delete cascade not null,
+  mood integer not null check (mood between 1 and 5),
+  note text default '',
+  created_at timestamptz default now()
+);
+
+create table if not exists public.video_sessions (
+  id uuid primary key default gen_random_uuid(),
+  conversation_id uuid references public.conversations on delete cascade not null,
+  user_id uuid references auth.users on delete cascade not null,
+  started_at timestamptz default now(),
+  ended_at timestamptz,
+  minutes_billed integer default 0,
+  tokens_spent integer default 0
+);
+
 create index if not exists messages_conversation_id_idx on public.messages (conversation_id, created_at);
+create index if not exists mood_checkins_user_id_idx on public.mood_checkins (user_id, created_at desc);
+create index if not exists profiles_available_idx on public.profiles (is_available) where is_available = true;
 
 alter table public.profiles enable row level security;
 alter table public.token_balances enable row level security;
@@ -64,6 +88,8 @@ alter table public.token_transactions enable row level security;
 alter table public.matches enable row level security;
 alter table public.conversations enable row level security;
 alter table public.messages enable row level security;
+alter table public.mood_checkins enable row level security;
+alter table public.video_sessions enable row level security;
 
 create policy "Profiles are viewable by authenticated users"
   on public.profiles for select to authenticated using (true);
@@ -114,6 +140,15 @@ create policy "Users can send messages in their conversations"
     )
   );
 
+create policy "Users can view own mood checkins"
+  on public.mood_checkins for select to authenticated using (auth.uid() = user_id);
+
+create policy "Users can insert own mood checkins"
+  on public.mood_checkins for insert to authenticated with check (auth.uid() = user_id);
+
+create policy "Users can view own video sessions"
+  on public.video_sessions for select to authenticated using (auth.uid() = user_id);
+
 -- Auto-create profile + starter tokens on signup
 create or replace function public.handle_new_user()
 returns trigger
@@ -121,11 +156,12 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, username, display_name)
+  insert into public.profiles (id, username, display_name, timezone)
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'username', split_part(new.email, '@', 1)),
-    coalesce(new.raw_user_meta_data->>'display_name', split_part(new.email, '@', 1))
+    coalesce(new.raw_user_meta_data->>'display_name', split_part(new.email, '@', 1)),
+    coalesce(new.raw_user_meta_data->>'timezone', 'UTC')
   );
   insert into public.token_balances (user_id, balance) values (new.id, 50);
   return new;
@@ -139,3 +175,8 @@ create trigger on_auth_user_created
 
 -- Enable realtime for messages
 alter publication supabase_realtime add table public.messages;
+
+-- Migration helpers (safe to re-run on existing DBs)
+alter table public.profiles add column if not exists timezone text default 'UTC';
+alter table public.matches add column if not exists compatibility_score integer default 0;
+alter table public.matches add column if not exists match_reasons text[] default '{}';

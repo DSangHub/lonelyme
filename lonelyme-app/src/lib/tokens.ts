@@ -1,6 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/server";
 
 const MATCH_COST = 10;
+const VIDEO_COST_PER_MINUTE = 5;
 
 export async function getTokenBalance(userId: string): Promise<number> {
   const supabase = await createServiceClient();
@@ -61,4 +62,4 @@ export async function creditTokens(
   });
 }
 
-export { MATCH_COST };
+export { MATCH_COST, VIDEO_COST_PER_MINUTE };

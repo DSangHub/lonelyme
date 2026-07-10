@@ -37,7 +37,7 @@ export default async function VideoPage({ params }: Props) {
   const partnerId = match.user1_id === user.id ? match.user2_id : match.user1_id;
   const { data: partner } = await supabase
     .from("profiles")
-    .select("display_name, username")
+    .select("display_name, username, languages")
     .eq("id", partnerId)
     .single();
 
@@ -48,12 +48,13 @@ export default async function VideoPage({ params }: Props) {
     .single();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-20 md:pb-0">
       <Navbar balance={balance?.balance ?? 0} />
-      <main className="mx-auto max-w-5xl px-6 py-6">
+      <main className="mx-auto max-w-5xl px-4 py-4 sm:px-6 sm:py-6">
         <VideoRoom
           conversationId={conversationId}
           partnerName={partner?.display_name ?? partner?.username ?? "Friend"}
+          subtitleLanguage={partner?.languages?.[0] ?? "English"}
         />
       </main>
     </div>

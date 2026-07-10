@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { spendTokens, MATCH_COST } from "@/lib/tokens";
+import { rankCandidates } from "@/lib/matching";
 
-export async function POST() {
+export async function GET() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -12,6 +13,42 @@ export async function POST() {
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const { data: myProfile } = await supabase
+    .from("profiles")
+    .select("languages, interests, timezone")
+    .eq("id", user.id)
+    .single();
+
+  if (!myProfile) {
+    return NextResponse.json({ error: "Complete your profile first" }, { status: 400 });
+  }
+
+  const service = await createServiceClient();
+  const { data: candidates } = await service
+    .from("profiles")
+    .select("id, display_name, username, languages, interests, timezone")
+    .eq("is_available", true)
+    .neq("id", user.id)
+    .limit(50);
+
+  const suggestions = rankCandidates(myProfile, candidates ?? [], 8);
+
+  return NextResponse.json({ suggestions });
+}
+
+export async function POST(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json().catch(() => ({}));
+  const targetUserId = body.partnerId as string | undefined;
 
   const spent = await spendTokens(user.id, MATCH_COST, "Match with global friend");
   if (!spent) {
@@ -23,28 +60,36 @@ export async function POST() {
 
   const service = await createServiceClient();
 
+  const { data: myProfile } = await service
+    .from("profiles")
+    .select("languages, interests, timezone")
+    .eq("id", user.id)
+    .single();
+
   const { data: candidates } = await service
     .from("profiles")
-    .select("id, display_name, username, languages, interests")
+    .select("id, display_name, username, languages, interests, timezone")
     .eq("is_available", true)
     .neq("id", user.id)
-    .limit(20);
+    .limit(50);
 
-  if (!candidates?.length) {
-    const { getTokenBalance } = await import("@/lib/tokens");
-    const currentBalance = await getTokenBalance(user.id);
-    await service
-      .from("token_balances")
-      .update({
-        balance: currentBalance + MATCH_COST,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", user.id);
+  if (!candidates?.length || !myProfile) {
+    await refundMatchTokens(service, user.id);
     return NextResponse.json({ error: "No matches available right now" }, { status: 404 });
   }
 
-  const match = candidates[Math.floor(Math.random() * candidates.length)];
-  const [user1, user2] = [user.id, match.id].sort();
+  let best = rankCandidates(myProfile, candidates, 1)[0];
+
+  if (targetUserId) {
+    const chosen = candidates.find((c) => c.id === targetUserId);
+    if (chosen) {
+      const { scoreMatch } = await import("@/lib/matching");
+      best = scoreMatch(myProfile, chosen);
+    }
+  }
+
+  const partner = best.profile;
+  const [user1, user2] = [user.id, partner.id].sort();
 
   const { data: existingMatch } = await service
     .from("matches")
@@ -58,15 +103,20 @@ export async function POST() {
   if (!matchId) {
     const { data: newMatch, error } = await service
       .from("matches")
-      .insert({ user1_id: user1, user2_id: user2 })
+      .insert({
+        user1_id: user1,
+        user2_id: user2,
+        compatibility_score: best.score,
+        match_reasons: best.reasons,
+      })
       .select("id")
       .single();
 
     if (error || !newMatch) {
+      await refundMatchTokens(service, user.id);
       return NextResponse.json({ error: "Failed to create match" }, { status: 500 });
     }
     matchId = newMatch.id;
-
     await service.from("conversations").insert({ match_id: matchId });
   }
 
@@ -79,27 +129,23 @@ export async function POST() {
   return NextResponse.json({
     matchId,
     conversationId: conversation?.id,
-    partner: match,
+    partner,
+    compatibilityScore: best.score,
+    matchReasons: best.reasons,
   });
 }
 
-export async function GET() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const service = await createServiceClient();
-  const { data: matches } = await service
-    .from("matches")
-    .select("id, user1_id, user2_id, status, created_at")
-    .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
-    .eq("status", "active")
-    .order("created_at", { ascending: false });
-
-  return NextResponse.json({ matches: matches ?? [] });
+async function refundMatchTokens(
+  service: Awaited<ReturnType<typeof createServiceClient>>,
+  userId: string
+) {
+  const { getTokenBalance, MATCH_COST } = await import("@/lib/tokens");
+  const currentBalance = await getTokenBalance(userId);
+  await service
+    .from("token_balances")
+    .update({
+      balance: currentBalance + MATCH_COST,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("user_id", userId);
 }

@@ -50,7 +50,7 @@ export default async function ChatPage({ params }: Props) {
   return (
     <div className="min-h-screen">
       <Navbar balance={balance?.balance ?? 0} />
-      <main className="mx-auto max-w-4xl px-6 py-6">
+      <main className="mx-auto max-w-4xl px-4 py-4 pb-24 sm:px-6 sm:py-6 md:pb-6">
         <ChatRoom
           conversationId={conversationId}
           userId={user.id}

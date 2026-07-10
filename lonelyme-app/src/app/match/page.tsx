@@ -20,9 +20,9 @@ export default async function MatchPage() {
     .single();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-20 md:pb-0">
       <Navbar balance={balance?.balance ?? 0} />
-      <main className="mx-auto max-w-2xl px-6 py-10">
+      <main className="mx-auto max-w-2xl px-4 py-6 pb-24 sm:px-6 sm:py-10 md:pb-10">
         <MatchFinder balance={balance?.balance ?? 0} />
       </main>
     </div>
