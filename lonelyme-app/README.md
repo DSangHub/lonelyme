@@ -17,13 +17,18 @@ Platonic global friendship app with AI matching, real-time translation, safety m
 | **Safety** | AI moderation flags scams, romance pressure, inappropriate content |
 | **Wellness** | Connection stats, mood check-ins (1–5), mood history chart |
 
-## Setup
+## Quick start
 
 ```bash
 cd lonelyme-app
 npm install
-cp env.example .env.local
+npm run sandbox:setup    # copies sandbox env, optionally starts Supabase local
+npm run dev
 ```
+
+**Full sandbox guide:** [SANDBOX.md](SANDBOX.md)
+
+## Setup (production / cloud)
 
 1. Create a [Supabase](https://supabase.com) project
 2. Run `supabase/schema.sql` in the SQL Editor

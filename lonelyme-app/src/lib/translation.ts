@@ -1,9 +1,21 @@
+import { isMockTranslation } from "@/lib/sandbox";
+
+const MOCK_PHRASES: Record<string, Record<string, string>> = {
+  hello: { Spanish: "Hola", French: "Bonjour", Japanese: "こんにちは", Portuguese: "Olá" },
+  "how are you": { Spanish: "¿Cómo estás?", French: "Comment ça va?", Japanese: "お元気ですか？" },
+  friend: { Spanish: "amigo", French: "ami", Japanese: "友達", Portuguese: "amigo" },
+};
+
 export async function translateText(
   text: string,
   targetLanguage: string,
   sourceLanguage = "auto"
 ): Promise<string> {
-  const provider = process.env.TRANSLATION_PROVIDER ?? "gemini";
+  if (isMockTranslation()) {
+    return mockTranslate(text, targetLanguage);
+  }
+
+  const provider = process.env.TRANSLATION_PROVIDER ?? "mock";
 
   if (provider === "deepl" && process.env.DEEPL_API_KEY) {
     return translateWithDeepL(text, targetLanguage, sourceLanguage);
@@ -70,5 +82,11 @@ async function translateWithGemini(text: string, targetLanguage: string): Promis
 }
 
 function mockTranslate(text: string, targetLanguage: string): string {
+  const lower = text.toLowerCase().trim();
+  for (const [phrase, translations] of Object.entries(MOCK_PHRASES)) {
+    if (lower.includes(phrase) && translations[targetLanguage]) {
+      return translations[targetLanguage];
+    }
+  }
   return `[${targetLanguage}] ${text}`;
 }

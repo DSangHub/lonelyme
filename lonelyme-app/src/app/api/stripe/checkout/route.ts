@@ -1,26 +1,41 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { stripe, getPackPriceId, getPackById } from "@/lib/stripe";
+import { isMockStripe } from "@/lib/sandbox";
 
 export async function POST(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { packId } = await request.json();
+
+  // Sandbox: use mock checkout when Stripe is in mock mode
+  if (isMockStripe()) {
+    const pack = getPackById(packId);
+    if (!pack) {
+      return NextResponse.json({ error: "Invalid pack" }, { status: 400 });
+    }
+    return NextResponse.json({
+      mock: true,
+      packId,
+      message: "Use mock checkout endpoint in sandbox mode",
+    });
+  }
+
   if (!process.env.STRIPE_SECRET_KEY) {
     return NextResponse.json(
-      { error: "Stripe not configured. Add STRIPE_SECRET_KEY and price IDs to .env.local" },
+      { error: "Stripe not configured. Set STRIPE_MODE=mock for sandbox or add Stripe keys." },
       { status: 503 }
     );
   }
 
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { packId } = await request.json();
     const pack = getPackById(packId);
     const priceId = getPackPriceId(packId);
 

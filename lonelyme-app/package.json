@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sandbox:setup": "bash scripts/setup-sandbox.sh",
+    "sandbox:start": "npx supabase start && npx supabase db reset",
+    "sandbox:stop": "npx supabase stop",
+    "sandbox:stripe": "bash scripts/stripe-setup.sh",
+    "sandbox:stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe/webhook"
   },
   "dependencies": {
     "@stripe/stripe-js": "^9.9.0",

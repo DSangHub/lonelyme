@@ -1,3 +1,5 @@
+import { isMockModeration } from "@/lib/sandbox";
+
 const MODERATION_SYSTEM_PROMPT = `You are a safety moderator for LonelyMe, a platonic global friendship app.
 Analyze the message for: scams, romance/dating pressure, harassment, hate speech, explicit content, financial requests, or manipulation.
 
@@ -26,7 +28,11 @@ export type ModerationResult = {
 };
 
 export async function moderateMessage(content: string): Promise<ModerationResult> {
-  const provider = process.env.MODERATION_PROVIDER ?? "gemini";
+  if (isMockModeration()) {
+    return moderateWithKeywords(content);
+  }
+
+  const provider = process.env.MODERATION_PROVIDER ?? "mock";
 
   if (provider === "gemini" && process.env.GEMINI_API_KEY) {
     return moderateWithGemini(content);
