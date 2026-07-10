@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LonelyMe - Safe Global Friends & Chats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .hero-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl">L</div>
+                <span class="text-2xl font-semibold text-blue-600">LonelyMe</span>
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#features" class="hover:text-blue-600">Features</a>
+                <a href="#how" class="hover:text-blue-600">How it Works</a>
+                <a href="#pricing" class="hover:text-blue-600">Pricing</a>
+                <a href="#safety" class="hover:text-blue-600">Safety</a>
+            </div>
+            <a href="#waitlist" class="bg-blue-600 text-white px-6 py-2.5 rounded-2xl font-medium hover:bg-blue-700 transition">Join Waitlist</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-bg text-white py-24">
+        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
+                    End loneliness.<br>
+                    <span class="text-blue-200">Connect safely with the world.</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-blue-100 mb-8">
+                    Real conversations with strangers from other countries. 
+                    Real-time language translation. AI-powered safety. 
+                    No dating pressure, no scams.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#waitlist" class="bg-white text-blue-700 px-8 py-4 rounded-3xl font-semibold text-lg hover:bg-blue-50 transition flex items-center gap-3">
+                        <i class="fas fa-arrow-right"></i> Join the Waitlist (Free)
+                    </a>
+                    <a href="#features" class="border border-white/70 px-8 py-4 rounded-3xl font-medium text-lg hover:bg-white/10 transition">
+                        Learn More
+                    </a>
+                </div>
+                <div class="mt-10 flex items-center gap-8 text-sm">
+                    <div class="flex -space-x-4">
+                        <div class="w-8 h-8 bg-white rounded-full border-2 border-blue-600 flex items-center justify-center text-xs">🌍</div>
+                        <div class="w-8 h-8 bg-white rounded-full border-2 border-blue-600 flex items-center justify-center text-xs">🗣️</div>
+                    </div>
+                    <div>
+                        <div class="font-medium">Thousands joining soon</div>
+                        <div class="text-blue-200">Safe • Translated • Meaningful</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <img src="https://picsum.photos/id/1015/600/520" alt="People connecting globally" class="rounded-3xl shadow-2xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="bg-white py-6 border-b">
+        <div class="max-w-6xl mx-auto px-6 flex flex-wrap justify-center items-center gap-x-12 gap-y-6 text-sm opacity-75">
+            <div class="flex items-center gap-2"><i class="fas fa-shield-alt"></i> AI Moderation</div>
+            <div class="flex items-center gap-2"><i class="fas fa-globe"></i> Global Connections</div>
+            <div class="flex items-center gap-2"><i class="fas fa-language"></i> Instant Translation</div>
+            <div class="flex items-center gap-2"><i class="fas fa-lock"></i> Privacy First</div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-4">Built for Real Connections</h2>
+            <p class="text-center text-gray-600 mb-16 max-w-md mx-auto">Safe, translated video & text chats designed to reduce loneliness — not add drama.</p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-8 rounded-3xl">
+                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl mb-6">🌍</div>
+                    <h3 class="text-2xl font-semibold mb-3">International Friends</h3>
+                    <p class="text-gray-600">Match with people from different countries and cultures. Start with text, move to voice or video when ready.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-3xl">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mb-6">🌐</div>
+                    <h3 class="text-2xl font-semibold mb-3">Language No Barrier</h3>
+                    <p class="text-gray-600">Real-time AI translation for messages, voice, and live subtitles on video. Speak naturally — understand instantly.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-3xl">
+                    <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-3xl mb-6">🛡️</div>
+                    <h3 class="text-2xl font-semibold mb-3">AI Safety First</h3>
+                    <p class="text-gray-600">Proactive moderation flags scams or pressure. Verified profiles. Platonic focus only.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section id="how" class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16">Simple. Safe. Start in minutes.</h2>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="mx-auto w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl font-bold mb-6">1</div>
+                    <h4 class="font-semibold mb-2">Sign Up</h4>
+                    <p class="text-gray-600">Quick profile with interests and languages.</p>
+                </div>
+                <div class="text-center">
+                    <div class="mx-auto w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl font-bold mb-6">2</div>
+                    <h4 class="font-semibold mb-2">Get Matched</h4>
+                    <p class="text-gray-600">AI suggests compatible global friends.</p>
+                </div>
+                <div class="text-center">
+                    <div class="mx-auto w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl font-bold mb-6">3</div>
+                    <h4 class="font-semibold mb-2">Chat Freely</h4>
+                    <p class="text-gray-600">Text, voice, or video with translation.</p>
+                </div>
+                <div class="text-center">
+                    <div class="mx-auto w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl font-bold mb-6">4</div>
+                    <h4 class="font-semibold mb-2">Stay Safe</h4>
+                    <p class="text-gray-600">AI watches out. Report anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Teaser -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Affordable & Flexible</h2>
+            <p class="text-xl text-gray-600 mb-12">No long commitments. Start small.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+                <div class="border border-gray-200 rounded-3xl p-10">
+                    <div class="text-sm uppercase tracking-widest text-gray-500 mb-2">Starter</div>
+                    <div class="text-5xl font-bold mb-2">$5–10</div>
+                    <div class="text-gray-600 mb-8">Token packs to try video chats & boosts</div>
+                    <ul class="text-left space-y-3 mb-10">
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-green-500 mt-1"></i> Initial video minutes</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-green-500 mt-1"></i> Priority matching</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-green-500 mt-1"></i> Full translation access</li>
+                    </ul>
+                    <a href="#waitlist" class="block w-full py-4 bg-gray-900 text-white rounded-2xl font-medium">Get Starter Tokens</a>
+                </div>
+                
+                <div class="border-2 border-blue-600 rounded-3xl p-10 relative">
+                    <div class="absolute -top-3 right-6 bg-blue-600 text-white text-xs px-4 py-1 rounded-full">Popular</div>
+                    <div class="text-sm uppercase tracking-widest text-blue-600 mb-2">Pay as You Go + Sub</div>
+                    <div class="text-5xl font-bold mb-2">Flexible</div>
+                    <div class="text-gray-600 mb-8">Tokens or low monthly for heavy users</div>
+                    <ul class="text-left space-y-3 mb-10">
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-green-500 mt-1"></i> No yearly lock-in</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-green-500 mt-1"></i> Unlimited text</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-green-500 mt-1"></i> Discounted video</li>
+                    </ul>
+                    <a href="#waitlist" class="block w-full py-4 bg-blue-600 text-white rounded-2xl font-medium">Join & Choose Later</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety -->
+    <section id="safety" class="py-20 bg-gray-900 text-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold mb-8">Your Safety is Our Priority</h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <i class="fas fa-robot text-4xl text-blue-400 flex-shrink-0"></i>
+                            <div>
+                                <div class="font-semibold mb-1">AI Moderation</div>
+                                <div class="text-gray-400">Real-time detection of scams, pressure, or inappropriate behavior.</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <i class="fas fa-user-shield text-4xl text-blue-400 flex-shrink-0"></i>
+                            <div>
+                                <div class="font-semibold mb-1">Verified Profiles</div>
+                                <div class="text-gray-400">Video intros and optional checks.</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <i class="fas fa-heart text-4xl text-blue-400 flex-shrink-0"></i>
+                            <div>
+                                <div class="font-semibold mb-1">Platonic Focus</div>
+                                <div class="text-gray-400">Built for friendship and exchange — romance/scams discouraged.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-3xl p-10">
+                    <p class="italic text-lg">"Finally a place to talk to people worldwide without worrying about hidden agendas."</p>
+                    <p class="mt-6 text-sm opacity-75">— Early tester</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waitlist -->
+    <section id="waitlist" class="py-24 bg-white">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Be Among the First</h2>
+            <p class="text-xl text-gray-600 mb-10">Join the waitlist for early access, token credits, and updates on launch.</p>
+            
+            <form id="waitlist-form" class="max-w-md mx-auto space-y-6">
+                <input type="email" id="email" placeholder="your@email.com" required
+                       class="w-full px-6 py-5 border border-gray-300 rounded-3xl focus:outline-none focus:border-blue-500 text-lg">
+                <button type="submit"
+                        class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-5 rounded-3xl font-semibold text-lg hover:brightness-105 transition">
+                    Join Waitlist — Get Early Tokens
+                </button>
+            </form>
+            <p class="text-xs text-gray-500 mt-8">We respect your inbox. No spam.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <div class="w-8 h-8 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-bold">L</div>
+                <span class="text-2xl font-semibold text-white">LonelyMe</span>
+            </div>
+            <p class="text-sm">Making meaningful global connections safer and easier.<br>© 2026 LonelyMe. All rights reserved.</p>
+            <div class="mt-8 text-xs flex justify-center gap-6">
+                <a href="#" class="hover:text-white">Privacy</a>
+                <a href="#" class="hover:text-white">Safety Guidelines</a>
+                <a href="#" class="hover:text-white">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('waitlist-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            if (email) {
+                alert('Thank you! You\'ve been added to the LonelyMe waitlist. Early access coming soon.');
+                this.reset();
+            }
+        });
+    </script>
+</body>
+</html>
